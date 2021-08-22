@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.mymaps.MapsActivity;
 import com.example.mymaps.R;
 import com.example.mymaps.databinding.FragmentHomeBinding;
 
@@ -54,6 +55,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         return root;
     }
 
+    public void verificar() {
+        if (!txtAlt.getText().toString().equals("") || !txtLong.getText().toString().equals("") || !txtLat.getText().toString().equals("")) {
+            Intent intent = new Intent(getContext(), MapsActivity.class);
+            intent.putExtra("latitud", txtLat.getText().toString());
+            intent.putExtra("longitud", txtLong.getText().toString());
+            intent.putExtra("altitud", txtLat.getText().toString());
+            startActivity(intent);
+        } else {
+            Toast.makeText(getContext(), "Los campo no estan llenos", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -68,7 +83,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             //Toast.makeText(getContext(),"clic bton",Toast.LENGTH_LONG).show();
         }
         if (v == btnMap) {
-            Intent intentMap = new Intent();
+            verificar();
 
         }
     }
@@ -91,7 +106,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         if (objLocation.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             txtLong.setText(Miposicion.longitud + "");
             txtLat.setText(Miposicion.latitud + "");
-            txtAlt.setText(Miposicion.altitud+"");
+            txtAlt.setText(Miposicion.altitud + "");
 
         } else {
             Toast.makeText(getContext(), "GPS DESABILITADO", Toast.LENGTH_LONG).show();

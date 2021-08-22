@@ -16,6 +16,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.mymaps.databinding.ActivityMapsBinding;
@@ -26,7 +27,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ActivityMapsBinding binding;
     private double longitud, latitud;
     SharedPreferences preferences;
-    private Button btnfavoritos;
+    private Button btnfavoritos, btnLimpiarMarcas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         btnfavoritos = (Button) findViewById(R.id.fav);
+        btnLimpiarMarcas = (Button)findViewById(R.id.limpiar);
+        btnLimpiarMarcas.setOnClickListener(this);
         btnfavoritos.setOnClickListener(this);
     }
 
@@ -102,7 +105,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         double log = preferences.getFloat("longitud", 0);
         if (lat != 0) {
             LatLng puntoPref = new LatLng(lat, log);
-            mMap.addMarker(new MarkerOptions().position(puntoPref).title("Mi ubicacion"));
+            mMap.addMarker(new MarkerOptions().position(puntoPref).title("Mi ubicacion").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(puntoPref));
         }else{
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -118,6 +121,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onClick(View v) {
         if (v == btnfavoritos) {
             cargarPreferencias();
+        }else if(v==btnLimpiarMarcas){
+            mMap.clear();
         }
     }
 }
